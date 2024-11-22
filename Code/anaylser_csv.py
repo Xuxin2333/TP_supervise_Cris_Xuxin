@@ -8,5 +8,21 @@ import matplotlib.pyplot as plt
 features['AGEP'].hist(bins=30)
 plt.title('Age Distribution')
 plt.xlabel('Age')
-plt.ylabel('Frequency')
+plt.ylabel('Nb de personnes')
 plt.show()
+
+# 2e Employee
+features['COW'].value_counts().plot(kind='bar')
+plt.title('Class of worker Distribution')
+plt.xlabel('Worker type')
+plt.ylabel('Nb de personnes')
+plt.show()
+
+# 3e  MAR
+features['MAR'].value_counts().plot(kind='bar')
+plt.title('Marie Distribution')
+plt.xlabel('Marie type')
+plt.ylabel('Nb de personnes')
+plt.show()
+
+data = pd.concat([features, labels], axis=1)
