@@ -15,6 +15,12 @@ print(features.head())
 print(features.columns)
 
 # Delete missing values - NULL, If 'MAR' or 'COW' contain NULL values 
+features['AGEP'].hist(bins=30)
+plt.title('Age Distribution')
+plt.xlabel('Age')
+plt.ylabel('Nb de personnes')
+plt.show()
+# Limpiar los datos eliminando filas con valores nulos en 'MAR' y 'COW'
 features_df = features.dropna(subset=['MAR', 'COW'])
 
 # Create relation between 'MAR' and 'COW' 
@@ -89,3 +95,6 @@ my_scaler = StandardScaler()
 X_train_Standed = my_scaler.fit_transform(X_train.select_dtypes(include=['float64','int64']))
 X_test_Standed = my_scaler.fit_transform(X_test.select_dtypes(include=['float64','int64']))
 joblib.dump (my_scaler, 'my_scaler.joblib')
+
+
+
