@@ -86,15 +86,62 @@ print("\nSize TEST set:", X_test.shape, "\n")
 print("TEST set:")
 print(X_test) # Print Results
 
-
-
-# from sklearn.utils import shuffle
-# datos_shuffled = shuffle(features)
 # To standaliser the datas
 my_scaler = StandardScaler()
 X_train_Standed = my_scaler.fit_transform(X_train.select_dtypes(include=['float64','int64']))
 X_test_Standed = my_scaler.fit_transform(X_test.select_dtypes(include=['float64','int64']))
 joblib.dump (my_scaler, 'my_scaler.joblib')
 
+
+
+from sklearn.utils import shuffle
+datos_shuffled = shuffle(features)
+
+
+#SVM
+# Validation Croisée
+from sklearn import datasets, linear_model
+from sklearn.model_selection import cross_val_score
+from sklearn.svm import SVC
+svm_model = SVC(kernel='linear')
+scores = cross_val_score(svm_model,X_train,y_train,cv=5).mean()
+
+# Accuracy & Classification report & Confusion matrix
+from sklearn.model_selection import cross_val_score, GridSearchCV
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+svm_model.fit(X_train, y_train)
+y_pred_svm = svm_model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred_svm)
+classification_rep = classification_report(y_test, y_pred_svm)
+conf_matrix = confusion_matrix(y_test, y_pred_svm)
+
+# Grid Search for best parameters
+param_grid = {'C': [0.1, 1, 10, 20], 'kernel': ['rbf', 'poly']}
+grid_search = GridSearchCV(SVC(), param_grid, cv=5)
+grid_search.fit(X_train, y_train)
+best_params = grid_search.best_params_
+
+print("best_params = ", best_params)
+
+#Forest 
+
+from sklearn.ensemble import RandomForestClassifier
+
+rf_model = RandomForestClassifier()
+cv_scores_rf = cross_val_score(rf_model, X_train, y_train, cv=5).mean()
+print("validation croisée average score = ", cv_scores_rf)
+
+
+rf_model.fit(X_train, y_train)
+y_pred_rf = rf_model.predict(X_test)
+accuracy_rf = accuracy_score(y_test, y_pred_rf)
+classification_rep_rf = classification_report(y_test, y_pred_rf)
+conf_matrix_rf = confusion_matrix(y_test, y_pred_rf)
+
+
+param_grid_rf = {'n_estimators': [50, 100, 120],'criterion':['gini','entropy','log_loss'],'max_depth': [None, 10, 20],'min_samples_split':[0.1, 1.0, 2]}
+grid_search_rf = GridSearchCV(RandomForestClassifier(), param_grid_rf, cv=5)
+grid_search_rf.fit(X_train, y_train)
+best_params_rf = grid_search_rf.best_params_
 
 
